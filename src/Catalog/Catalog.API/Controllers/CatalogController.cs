@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Catalog.API.Entities;
 using Catalog.API.Repositories.Interfaces;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -28,7 +29,8 @@ namespace Catalog.API.Controllers
         [ProducesResponseType(typeof(IEnumerable<Product>), (int)HttpStatusCode.OK)]
         public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
         {
-            throw new NotImplementedException();
+            _logger.LogInformation("Getting all products");
+            return Ok(await _repository.GetProducts());
         }
 
         [HttpGet("{id:length(24)}", Name = "GetProduct")]
@@ -36,7 +38,14 @@ namespace Catalog.API.Controllers
         [ProducesResponseType(typeof(Product), (int)HttpStatusCode.OK)]
         public async Task<ActionResult<Product>> GetProduct(string id)
         {
-            throw new NotImplementedException();
+            var product = await _repository.GetProduct(id);
+            if (product == null)
+            {
+                _logger.LogWarning("Didn't find product with id " + id);
+                return NotFound();
+            }
+            _logger.LogInformation("Found product with id " + id);
+            return Ok(product);
         }
 
         [Route("[action]/{category}")]
@@ -44,28 +53,48 @@ namespace Catalog.API.Controllers
         [ProducesResponseType(typeof(Product), (int)HttpStatusCode.OK)]
         public async Task<ActionResult<IEnumerable<Product>>> GetProductByCategory(string category)
         {
-            throw new NotImplementedException();
+            var categories = await _repository.GetProductByCategory(category);
+            if(categories == null)
+            {
+                _logger.LogWarning("Didn't find products with category " + category);
+                return NotFound();
+            }
+            _logger.LogInformation("Found products with category " + category);
+            return Ok(categories);
         }
 
         [HttpPost]
         [ProducesResponseType(typeof(Product), (int)HttpStatusCode.Created)]
         public async Task<ActionResult<Product>> CreateProduct([FromBody] Product product)
         {
-            throw new NotImplementedException();
+            await _repository.Create(product);
+            return Created(new Uri(Request.GetEncodedUrl()),product);
         }
 
         [HttpPut]
         [ProducesResponseType(typeof(Product), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> UpdateProduct([FromBody] Product value)
         {
-            throw new NotImplementedException();
+            if (await _repository.Update(value))
+            {
+                _logger.LogInformation("Updated product with id " + value.Id);
+                return Ok(value);
+            }
+            _logger.LogError("Failed to Update product with id " + value.Id);
+            return BadRequest("Failed to update product");
         }
 
         [HttpDelete("{id:length(24)}")]
         [ProducesResponseType(typeof(void), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> DeleteProductById(string id)
         {
-            throw new NotImplementedException();
+            if (await _repository.Delete(id))
+            {
+                _logger.LogInformation("Deleted product with id " + id);
+                return Ok();
+            }
+            _logger.LogError("Failed to delete product with id " + id);
+            return BadRequest("Failed to delete product");
         }
     }
 }
