@@ -45,7 +45,7 @@ namespace Basket.API.Repositories
             if (redisCart.IsNullOrEmpty) return null;
             try
             {
-               return JsonConvert.DeserializeObject<BasketCart>(redisCart);
+                return JsonConvert.DeserializeObject<BasketCart>(redisCart);
             }
             catch
             {

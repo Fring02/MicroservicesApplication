@@ -20,7 +20,7 @@
     "Basket.API": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "api/v1/Basket",
+      "launchUrl": "swagger",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
