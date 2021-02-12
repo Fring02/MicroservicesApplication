@@ -9,7 +9,8 @@ services:
       context: .
       dockerfile: src/Catalog/Catalog.API/Dockerfile
 
-    
+  rabbitmq:
+    image: rabbitmq:3-management  
   basketdb:
     image: redis
   basket.api:
@@ -18,3 +19,10 @@ services:
       context: .
       dockerfile: src/Basket.API/Dockerfile
 
+  orderingdb:
+    image: postgres
+  ordering.api:
+    image: ${DOCKER_REGISTRY-}orderingapi
+    build:
+      context: .
+      dockerfile: src/Ordering/Ordering.API/Dockerfile

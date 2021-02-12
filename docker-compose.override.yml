@@ -38,9 +38,47 @@ services:
         environment:
           - ASPNETCORE_ENVIRONMENT=Development
           - "ConnectionStrings:Redis=basketdb:6379"
+          - "EventBus:HostName=rabbitmq"
+          - "EventBus:Username=guest"
+          - "EventBus:Password=guest"
         depends_on:
             - basketdb
+            - rabbitmq
         ports:
             - "5001:80"
         volumes:
             - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+
+
+   rabbitmq:
+        image: rabbitmq:3-management
+        hostname: rabbitmq
+        container_name: rabbitmq
+        restart: always
+        ports:
+            - "5672:5672"
+            - "15672:15672"
+   orderingdb:
+        image: postgres
+        container_name: orderingdb
+        restart: always
+        environment:
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: Rubin1!!
+            POSTGRES_DB: OrderDb
+        ports:
+            - "5432:5432"
+
+   ordering.api:
+        depends_on:
+            - orderingdb
+            - rabbitmq
+        environment:
+          - ASPNETCORE_ENVIRONMENT=Development
+          - "EventBus:HostName=rabbitmq"
+          - "EventBus:Username=guest"
+          - "EventBus:Password=guest"
+        ports:
+          - "5000:80"
+        volumes:
+          - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
