@@ -40,7 +40,7 @@ namespace Basket.API.Controllers
             return Ok(basket ?? new BasketCart() { Username = username });
         }
 
-        [HttpPost("add")]
+        [HttpPost]
         public async Task<IActionResult> AddItemToBasket(BasketCartItem item, string username)
         {
             if (string.IsNullOrEmpty(username)) return BadRequest("Couldn't find basket");
@@ -49,7 +49,7 @@ namespace Basket.API.Controllers
             return Ok(basket);
         }
 
-        [HttpDelete("delete")]
+        [HttpDelete]
         public async Task<IActionResult> DeleteItemFromBasket(BasketCartItem item, string username)
         {
             if (string.IsNullOrEmpty(username)) return BadRequest("Couldn't find basket");
