@@ -1,21 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
-namespace Basket.API.Entities
+namespace Shopping.Entities
 {
-    public class BasketCart
+    public class Cart
     {
         public string Username { get; set; }
-        public List<BasketCartItem> Items { get; set; } = new List<BasketCartItem>();
+        public List<CartItem> Items { get; set; } = new List<CartItem>();
 
-        public BasketCart()
+        public Cart()
         {
         }
 
-        public BasketCart(string username)
+        public Cart(string username)
         {
             Username = username;
         }

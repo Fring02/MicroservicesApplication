@@ -35,7 +35,6 @@ namespace Basket.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetBasket(string username)
         {
-            if (string.IsNullOrEmpty(username)) return NotFound();
             var basket = await _repos.GetCart(username);
             return Ok(basket ?? new BasketCart() { Username = username });
         }

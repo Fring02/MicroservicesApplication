@@ -1,27 +1,19 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using EventBusRabbitMQ;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Ordering.API.Mapping;
 using Ordering.API.RabbitMQ;
 using Ordering.Core.Repositories;
-using Ordering.Core.Repositories.Base;
 using Ordering.Infrastructure.Data;
 using Ordering.Infrastructure.Repositories;
 using RabbitMQ.Client;
 using Ordering.API.Extensions;
-using Microsoft.EntityFrameworkCore.Design;
 namespace Ordering.API
 {
     public class Startup
@@ -54,7 +46,6 @@ namespace Ordering.API
                 var factory = new ConnectionFactory() { HostName = Configuration["EventBus:HostName"] };
                 factory.UserName = Configuration["EventBus:Username"];
                 factory.Password = Configuration["EventBus:Password"];
-                Console.WriteLine(factory.HostName + " " + factory.UserName + " " + factory.Password);
                 return new RabbitMQConnection(factory);
             });
             services.AddSingleton<EventBusRabbitMQConsumer>();
@@ -77,9 +68,7 @@ namespace Ordering.API
             {
                 app.UseDeveloperExceptionPage();
             }
-
             app.UseHttpsRedirection();
-
             app.UseRouting();
 
             app.UseAuthorization();
