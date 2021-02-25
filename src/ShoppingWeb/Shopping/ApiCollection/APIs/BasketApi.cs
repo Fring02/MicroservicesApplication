@@ -9,7 +9,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Shopping.ApiCollection
+namespace Shopping.ApiCollection.APIs
 {
     public class BasketApi : BaseHttpClientFactory, IBasketApi
     {
@@ -24,7 +24,7 @@ namespace Shopping.ApiCollection
 
         public async Task<Cart> AddItem(string username, CartItem item)
         {
-                var message = _builder
+            using var message = _builder
             .HttpMethod(HttpMethod.Post).AddQueryString("username", username).
             Content(new StringContent(JsonConvert.SerializeObject(item), Encoding.UTF8, "application/json"))
             .GetHttpMessage();
@@ -35,7 +35,7 @@ namespace Shopping.ApiCollection
         {
             using (_builder = new HttpRequestBuilder(_settings.BaseAddress).AddToPath(_settings.BasketPath))
             {
-                var message = _builder.AddToPath(username)
+                using var message = _builder.AddToPath(username)
             .HttpMethod(HttpMethod.Delete)
             .GetHttpMessage();
                 var response = await GetResponseStringAsync(message);

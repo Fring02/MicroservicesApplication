@@ -11,5 +11,6 @@ namespace Shopping.ApiCollection.Settings
         public string CatalogPath { get; set; }
         public string BasketPath { get; set; }
         public string OrderingPath { get; set; }
+        public string UsersPath { get; set; }
     }
 }

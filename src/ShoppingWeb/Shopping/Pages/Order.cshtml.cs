@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Shopping.ApiCollection.Interfaces;
@@ -11,18 +13,29 @@ namespace Shopping.Pages
     public class OrderModel : PageModel
     {
         private readonly IOrderApi _orderApi;
+        private string username;
 
-        public OrderModel(IOrderApi orderApi)
+        public OrderModel(IApiFactory factory)
         {
-            _orderApi = orderApi ?? throw new ArgumentNullException(nameof(orderApi));
+            _orderApi = factory.OrderApi ?? throw new ArgumentNullException(nameof(_orderApi));
         }
 
         public IEnumerable<Order> Orders { get; set; } = new List<Order>();
 
         public async Task<IActionResult> OnGetAsync()
         {
-            Orders = await _orderApi.GetOrdersByUsername("test");
+            username = HttpContext.Session.GetString("username");
+            Orders = await _orderApi.GetOrdersByUsername(username);
             return Page();
-        }       
+        }
+        
+        public async Task<IActionResult> OnPostDeleteOrderByIdAsync(int orderId)
+        {
+            if(await _orderApi.DeleteOrderById(orderId))
+            {
+                return RedirectToPage();
+            }
+            return RedirectToPage(new { orderDeleteError = "Failed to delete order" });
+        }
     }
 }

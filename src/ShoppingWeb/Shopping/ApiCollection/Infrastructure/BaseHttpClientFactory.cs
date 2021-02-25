@@ -21,7 +21,7 @@ namespace Shopping.API.Infrastructure
         public virtual async Task<T> GetResponseAsync<T>(HttpRequestMessage request) where T : class
         {
             using var client = Client;
-            var response = await client.SendAsync(request);
+            using var response = await client.SendAsync(request);
             T result = null;
             try
             {
@@ -40,7 +40,7 @@ namespace Shopping.API.Infrastructure
         public virtual async Task<string> GetResponseStringAsync(HttpRequestMessage request)
         {
             using var client = Client;
-            var response = await client.SendAsync(request);
+            using var response = await client.SendAsync(request);
             try
             {
                 response.EnsureSuccessStatusCode();

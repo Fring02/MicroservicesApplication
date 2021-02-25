@@ -11,7 +11,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Shopping.ApiCollection
+namespace Shopping.ApiCollection.APIs
 {
     public class ProductApi : BaseHttpClientFactory, IProductApi
     {

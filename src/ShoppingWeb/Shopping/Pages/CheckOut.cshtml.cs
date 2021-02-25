@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Shopping.ApiCollection.Interfaces;
@@ -11,38 +13,44 @@ namespace Shopping.Pages
     {
         private readonly IBasketApi _basketApi;
         private readonly IOrderApi _orderApi;
+        private readonly IUsersApi _usersApi;
+        private string username;
 
-        public CheckOutModel(IBasketApi basketApi, IOrderApi orderApi)
+        public CheckOutModel(IApiFactory factory)
         {
-            _basketApi = basketApi ?? throw new ArgumentNullException(nameof(basketApi));
-            _orderApi = orderApi ?? throw new ArgumentNullException(nameof(orderApi));
+            _basketApi = factory.BasketApi ?? throw new ArgumentNullException(nameof(_basketApi));
+            _orderApi = factory.OrderApi ?? throw new ArgumentNullException(nameof(_orderApi));
+            _usersApi = factory.UsersApi ?? throw new ArgumentNullException(nameof(_usersApi));
         }
 
         [BindProperty]
         public Order Order { get; set; }
 
-        public Cart Cart { get; set; } = new Cart();
-
+        public Cart Cart { get; set; }
+        
+        public User User { get; set; }
         public async Task<IActionResult> OnGetAsync()
         {
-            Cart = await _basketApi.GetCart("test");
+            User = await _usersApi.GetUserById(Guid.Parse(HttpContext.Session.GetString("id")));
+            Cart = await _basketApi.GetCart(User.Username);
             return Page();
         }
 
         public async Task<IActionResult> OnPostCheckOutAsync()
         {
-            Cart = await _basketApi.GetCart("test");
+            username = HttpContext.Session.GetString("username");
+            Cart = await _basketApi.GetCart(username);
 
             if (!ModelState.IsValid)
             {
                 return Page();
             }
 
-            Order.UserName = "test";
+            Order.UserName = username;
             Order.TotalPrice = Cart.TotalPrice;
 
             await _orderApi.Checkout(Order);
-            await _basketApi.DeleteCart("test");
+            await _basketApi.DeleteCart(Order.UserName);
             
             return RedirectToPage("Confirmation", "OrderSubmitted");
         }       

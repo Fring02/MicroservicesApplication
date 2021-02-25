@@ -11,7 +11,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Shopping.ApiCollection
+namespace Shopping.ApiCollection.APIs
 {
     public class OrderApi : BaseHttpClientFactory, IOrderApi
     {
@@ -30,6 +30,22 @@ namespace Shopping.ApiCollection
             .HttpMethod(HttpMethod.Post)
             .GetHttpMessage();
             await GetResponseStringAsync(message);
+        }
+
+        public async Task<bool> DeleteOrderById(int id)
+        {
+            using var message = _builder.AddToPath("/" + id)
+            .HttpMethod(HttpMethod.Delete)
+            .GetHttpMessage();
+            return await GetResponseStringAsync(message) != null;
+        }
+
+        public async Task<Order> GetOrderById(int id)
+        {
+            using var message = _builder.AddToPath("/" + id)
+            .HttpMethod(HttpMethod.Get)
+            .GetHttpMessage();
+            return await GetResponseAsync<Order>(message);
         }
 
         public async Task<IEnumerable<Order>> GetOrdersByUsername(string username)

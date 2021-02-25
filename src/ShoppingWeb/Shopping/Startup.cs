@@ -4,12 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
-using Shopping.ApiCollection;
-using Shopping.ApiCollection.Interfaces;
 using Shopping.ApiCollection.Settings;
 
 namespace Shopping
@@ -29,9 +28,16 @@ namespace Shopping
             services.Configure<ApiSettings>(Configuration.GetSection(nameof(ApiSettings)));
             services.AddHttpClient();
             services.AddSingleton<IApiSettings>(s => s.GetRequiredService<IOptions<ApiSettings>>().Value);
-            services.AddTransient<IBasketApi, BasketApi>();
-            services.AddTransient<IOrderApi, OrderApi>();
-            services.AddTransient<IProductApi, ProductApi>();
+            services.AddAPIs();
+            services.AddSession(options =>
+            {
+                options.Cookie.Name = "Shopping.Session";
+                options.IdleTimeout = TimeSpan.FromMinutes(60);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
+            services.AddDistributedMemoryCache();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddRazorPages();
         }
 
@@ -52,7 +58,7 @@ namespace Shopping
             app.UseRouting();
 
             app.UseAuthorization();
-
+            app.UseSession();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapRazorPages();

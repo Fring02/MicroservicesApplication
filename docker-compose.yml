@@ -39,3 +39,11 @@ services:
       context: .
       dockerfile: src/ShoppingWeb/Shopping/Dockerfile
 
+
+  authorizationservice:
+    image: ${DOCKER_REGISTRY-}authorizationservice
+    build:
+      context: .
+      dockerfile: src/Authorization/AuthorizationService/Dockerfile
+  usersdb:
+    image: sqlserver

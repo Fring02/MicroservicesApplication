@@ -91,6 +91,7 @@ services:
           - catalog.api
           - basket.api
           - ordering.api
+          - authorizationservice
         volumes:
           - ${HOME}/.microsoft/usersecrets/:/root/.microsoft/usersecrets
           - ${HOME}/.aspnet/https:/root/.aspnet/https/
@@ -107,9 +108,29 @@ services:
              - basket.api
              - ordering.api
              - ocelotapigateway
+             - authorizationservice
         volumes:
              - ${HOME}/.microsoft/usersecrets/:/root/.microsoft/usersecrets
              - ${HOME}/.aspnet/https:/root/.aspnet/https/
         ports:
          - "8001:80"
 
+
+   authorizationservice:
+        environment:
+          - ASPNETCORE_ENVIRONMENT=Development
+          - "ConnectionStrings:DefaultConnection=Server=usersdb,1433; Database=Usersdb; User=sa; Password=Rubin1!!"
+        container_name: authorizationservice
+        depends_on:
+            - usersdb
+        ports:
+          - "8002:80"
+
+   usersdb:
+        image: "mcr.microsoft.com/mssql/server"
+        environment:
+            SA_PASSWORD: "Rubin1!!"
+            ACCEPT_EULA: "Y"
+        container_name: usersdb
+        ports:
+            - "1433:1433"

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Shopping.ApiCollection.Interfaces;
@@ -12,11 +13,12 @@ namespace Shopping.Pages
     {
         private readonly IProductApi _productApi;
         private readonly IBasketApi _basketApi;
+        private string username;
 
-        public IndexModel(IProductApi productApi, IBasketApi basketApi)
+        public IndexModel(IApiFactory factory)
         {
-            _productApi = productApi ?? throw new ArgumentNullException(nameof(productApi));
-            _basketApi = basketApi ?? throw new ArgumentNullException(nameof(basketApi));
+            _productApi = factory.ProductApi ?? throw new ArgumentNullException(nameof(_productApi));
+            _basketApi = factory.BasketApi ?? throw new ArgumentNullException(nameof(_basketApi));
         }
 
         public IEnumerable<Product> ProductList { get; set; } = new List<Product>();
@@ -31,8 +33,10 @@ namespace Shopping.Pages
         {
             //if (!User.Identity.IsAuthenticated)
             //    return RedirectToPage("./Account/Login", new { area = "Identity" });
+            username = HttpContext.Session.GetString("username");
+            if (string.IsNullOrEmpty(username)) return RedirectToPage("Login",new { loginError = "Please sign in" });
             var item = await _productApi.GetProduct(productId);
-            await _basketApi.AddItem("test", new CartItem {ProductId = productId, Color = "Black", Price = item.Price,
+            await _basketApi.AddItem(username, new CartItem {ProductId = productId, Color = "Black", Price = item.Price,
             Quantity = 1, ProductName = item.Name});
             return RedirectToPage("Cart");
         }

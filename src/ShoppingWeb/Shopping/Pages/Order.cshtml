@@ -1,4 +1,5 @@
 ﻿@page
+@inject IHttpContextAccessor accessor
 @model OrderModel
 @{
     ViewData["Title"] = "Order";
@@ -21,32 +22,40 @@
     <div class="row">
         <div class="col-12">
             <div class="table-responsive">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th scope="col"> </th>
-                            <th scope="col">First Name</th>
-                            <th scope="col">Last Name</th>
-                            <th scope="col">Email</th>
-                            <th scope="col">Address</th>
-                            <th scope="col" class="text-right">TotalPrice</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-
-                        @foreach (var order in Model.Orders)
-                        {
+                @{ 
+                    <table class="table table-striped">
+                        <thead>
                             <tr>
-                                <td><img src="https://dummyimage.com/50x50/55595c/fff" /></td>
-                                <td>@order.FirstName</td>
-                                <td>@order.LastName</td>
-                                <td>@order.EmailAddress</td>
-                                <td>@order.AddressLine</td>
-                                <td class="text-right">@order.TotalPrice $</td>
+                                <th scope="col"> </th>
+                                <th scope="col">First Name</th>
+                                <th scope="col">Last Name</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Address</th>
+                                <th scope="col" class="text-right">TotalPrice</th>
                             </tr>
-                        }
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+
+                            @foreach (var order in Model.Orders)
+                            {
+                                <tr>
+                                    <td><img src="https://dummyimage.com/50x50/55595c/fff" /></td>
+                                    <td>@order.FirstName</td>
+                                    <td>@order.LastName</td>
+                                    <td>@order.EmailAddress</td>
+                                    <td>@order.AddressLine</td>
+                                    <td >@order.TotalPrice $</td>
+                                    <td class="text-right">
+                                        <form asp-page-handler="DeleteOrderById" method="post">
+                                            <button class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>
+                                            <input type="hidden" asp-for="@order.Id" name="orderId" />
+                                        </form>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    }
             </div>
         </div>
         <div class="col mb-2">

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Shopping.ApiCollection.Interfaces;
@@ -12,10 +13,10 @@ namespace Shopping.Pages
         private readonly IProductApi _productApi;
         private readonly IBasketApi _basketApi;
 
-        public ProductDetailModel(IProductApi productApi, IBasketApi basketApi)
+        public ProductDetailModel(IApiFactory factory)
         {
-            _productApi = productApi ?? throw new ArgumentNullException(nameof(productApi));
-            _basketApi = basketApi ?? throw new ArgumentNullException(nameof(basketApi));
+            _productApi = factory.ProductApi ?? throw new ArgumentNullException(nameof(_productApi));
+            _basketApi = factory.BasketApi ?? throw new ArgumentNullException(nameof(_basketApi));
         }
 
         public Product Product { get; set; }
@@ -42,9 +43,8 @@ namespace Shopping.Pages
 
         public async Task<IActionResult> OnPostAddToCartAsync(string productId)
         {
-            //if (!User.Identity.IsAuthenticated)
-            //    return RedirectToPage("./Account/Login", new { area = "Identity" });
-
+            string username = HttpContext.Session.GetString("username");
+            if (string.IsNullOrEmpty(username)) return RedirectToPage("Login", new { loginError = "Please sign in" });
             Product = await _productApi.GetProduct(productId);
             var item = new CartItem
             {
@@ -54,7 +54,7 @@ namespace Shopping.Pages
                 ProductName = Product.Name,
                 Price = Product.Price
             };
-            await _basketApi.AddItem("test", item);
+            await _basketApi.AddItem(username, item);
             return RedirectToPage("Cart");
         }
     }

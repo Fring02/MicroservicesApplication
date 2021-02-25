@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Ordering.API.Controllers
 {
-    [Route("api/v1/[controller]")]
+    [Route("api/v1/[controller]/")]
     [ApiController]
     public class OrderController : ControllerBase
     {
@@ -31,6 +31,22 @@ namespace Ordering.API.Controllers
             var orders = await _orderRepository.GetOrdersByUsername(username);
             if (orders == null) return NotFound();
             return Ok(_mapper.Map<IEnumerable<OrderResponse>>(orders));
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteOrderById(int id)
+        {
+            var order = await _orderRepository.GetByIdAsync(id);
+            await _orderRepository.DeleteAsync(order);
+            return Ok("Deleted order by id");
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetOrderById(int id)
+        {
+            var order = await _orderRepository.GetByIdAsync(id);
+            if(order == null) return BadRequest("Didn't order by id");
+            return Ok(order);
         }
     }
 }
