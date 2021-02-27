@@ -47,6 +47,8 @@ namespace Shopping.Pages
                 if(!string.IsNullOrEmpty(id)) HttpContext.Session.SetString("id", id);
                 string username = claims.FirstOrDefault(claim => claim.Type == ClaimTypes.Name).Value;
                 if (!string.IsNullOrEmpty(username)) HttpContext.Session.SetString("username", username);
+                string role = claims.FirstOrDefault(claim => claim.Type == ClaimTypes.Role).Value;
+                if (!string.IsNullOrEmpty(role)) HttpContext.Session.SetString("role", role);
             } catch (Exception e)
             {
                 if (responseString.Length < 50)

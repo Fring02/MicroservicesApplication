@@ -119,7 +119,7 @@ services:
    authorizationservice:
         environment:
           - ASPNETCORE_ENVIRONMENT=Development
-          - "ConnectionStrings:DefaultConnection=Server=usersdb,1433; Database=Usersdb; User=sa; Password=Rubin1!!"
+          - "ConnectionStrings:DefaultConnection=Server=usersdb,1433; Database=Usersdb; User=sa; Password=Rubin1!!; connect timeout=100;"
         container_name: authorizationservice
         depends_on:
             - usersdb

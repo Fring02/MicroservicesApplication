@@ -3,11 +3,8 @@ using Shopping.API.Infrastructure;
 using Shopping.ApiCollection.Interfaces;
 using Shopping.ApiCollection.Settings;
 using Shopping.Entities;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 

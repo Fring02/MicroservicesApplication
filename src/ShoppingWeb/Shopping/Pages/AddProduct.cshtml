@@ -1,0 +1,32 @@
+﻿@page
+@model Shopping.Pages.AddProductModel
+<form method="post" asp-page-handler="AddProduct" enctype="multipart/form-data">
+    <p class="text-danger">@ViewData["productError"]</p>
+    <div class="form-group">
+        <label for="productName">Product name:</label>
+        <input type="text" class="form-control" id="productName" name="name" placeholder="Enter product's name">
+    </div>
+    <div class="form-group">
+        <label for="productCategory">Product category:</label>
+        <input type="text" class="form-control" id="productCategory" name="category" placeholder="Enter product's category">
+    </div>
+    <div class="form-group">
+        <label for="productSummary">Product summary:</label>
+        <input class="form-control" id="productSummary" name="summary" placeholder="Enter product's summary">
+    </div>
+    <div class="form-group">
+        <label for="productImage">Product image</label>
+        <input type="file" class="form-control" name="file" id="productImage">
+    </div>
+    <div class="form-group">
+        <label for="productPrice">Product price</label>
+        <input type="number" class="form-control" name="price" id="productPrice" placeholder="Enter product's price">
+    </div>
+    <div class="form-group">
+        <label for="productDescription">Product description</label>
+        <textarea class="form-control" id="productDescription" name="description" rows="4"></textarea>
+    </div>
+    <div class="form-row">
+        <button type="submit" class="btn btn-large btn-primary">Submit</button>
+    </div>
+</form>

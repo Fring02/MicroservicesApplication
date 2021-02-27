@@ -38,6 +38,7 @@ namespace Shopping
             });
             services.AddDistributedMemoryCache();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddAutoMapper(typeof(ShoppingProfiles));
             services.AddRazorPages();
         }
 

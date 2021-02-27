@@ -11,7 +11,8 @@
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <link href="//fonts.googleapis.com/css?family=Open+Sans:400,300,600" rel="stylesheet" type="text/css">
     <link href="~/css/style.css" rel="stylesheet" type="text/css">
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="~/js/scripts.js"></script>
 </head>
 <body>
     <header>
@@ -58,10 +59,22 @@
                             else
                             {
                                 <li class="nav-item"><a class="nav-link" asp-page="/Profile">
-                                    <img src="https://cdn.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png"
-                                                                              class="img-fluid" style="max-width: 70px;"/></a></li>
+                                    <img src="https://i.stack.imgur.com/l60Hf.png"
+                                                                              class="img-fluid" style="max-width: 40px;"/></a></li>
+
+
+                                if (context.HttpContext.Session.GetString("role") == "admin")
+                                {
+                                    <a class="nav-link text-success" asp-page="/AddProduct">Add product</a>
+                                }
+                                <form asp-page="/Profile" asp-page-handler="Signout" method="post">
+                                <button type="submit" class="btn btn-danger btn-sm ml-3">
+                                    Signout
+                                    <span class="badge badge-light"></span>
+                                </button>
+                                </form>
                             }
-                        }
+                            }
                     </ul>
 
                     <form class="form-inline my-2 my-lg-0">

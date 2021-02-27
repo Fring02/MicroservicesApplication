@@ -33,6 +33,7 @@ namespace Shopping.ApiCollection.APIs
 
         public async Task<bool> DeleteCart(string username)
         {
+            if (_builder != null) _builder.Dispose();
             using (_builder = new HttpRequestBuilder(_settings.BaseAddress).AddToPath(_settings.BasketPath))
             {
                 using var message = _builder.AddToPath(username)
@@ -45,6 +46,7 @@ namespace Shopping.ApiCollection.APIs
 
         public async Task<bool> DeleteItem(string username, CartItem item)
         {
+            if (_builder != null) _builder.Dispose();
             using (_builder = new HttpRequestBuilder(_settings.BaseAddress).AddToPath(_settings.BasketPath))
             {
                 using var message = _builder.

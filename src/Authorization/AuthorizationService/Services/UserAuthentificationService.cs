@@ -23,7 +23,8 @@ namespace AuthorizationService.Services
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Name, user.Username),
-                new Claim(ClaimTypes.Authentication, "true")
+                new Claim(ClaimTypes.Authentication, "true"),
+                new Claim(ClaimTypes.Role, user.Role)
             };
             return new ClaimsIdentity(claims);
         }

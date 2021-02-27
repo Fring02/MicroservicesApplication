@@ -7,7 +7,7 @@
             @{
                 if (HttpContext.Request.Query.ContainsKey("registrationError"))
                 {
-                    <h4 class="alert alert-danger">@HttpContext.Request.Query["registrationError"]</h4>
+                    <h4 class="text-danger">@HttpContext.Request.Query["registrationError"]</h4>
                 }
             }
         </div>

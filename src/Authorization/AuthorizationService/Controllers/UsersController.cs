@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using AuthorizationService.Dtos;
 using AuthorizationService.Models;
 using AuthorizationService.Repositories.Interfaces;
 using AuthorizationService.Services;
 using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AuthorizationService.Controllers
@@ -60,6 +58,7 @@ namespace AuthorizationService.Controllers
             if (!string.IsNullOrEmpty(updateUser.Username)) user.Username = updateUser.Username;
             if (!string.IsNullOrEmpty(updateUser.Firstname)) user.Firstname = updateUser.Firstname;
             if (!string.IsNullOrEmpty(updateUser.Lastname)) user.Lastname = updateUser.Lastname;
+            if (!string.IsNullOrEmpty(updateUser.Email)) user.Lastname = updateUser.Email;
             if (!string.IsNullOrEmpty(updateUser.Password))
             {
                 EncryptionService.EncryptPassword(updateUser.Password, out byte[] hashed, out byte[] salt);
@@ -76,6 +75,7 @@ namespace AuthorizationService.Controllers
             if (!ModelState.IsValid) return BadRequest("Fill all fields");
             var user = _mapper.Map<User>(registerUser);
             if (await _users.UserExists(user)) return BadRequest("This user already exists");
+            user.Role = "user";
             user = await _users.Register(user, registerUser.Password);
             if (user == null) return StatusCode(500);
             var identity = _authService.CreateIdentity(user);

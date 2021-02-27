@@ -1,9 +1,9 @@
 ﻿@page "/Product/{productId}"
+@inject IHttpContextAccessor accessor
 @model ProductDetailModel
 @{
     ViewData["Title"] = "ProductDetail";
 }
-
 <div class="container">
     <div class="row">
         <div class="col">
@@ -25,7 +25,7 @@
             <div class="card bg-light mb-3">
                 <div class="card-body">
                     <a href="" data-toggle="modal" data-target="#productModal">
-                        <img class="img-fluid" src="~/images/product/@Model.Product.ImageFile.Replace('-','x')" />
+                        <img class="img-fluid" src="~/images/product/@Model.Product.ImageFile" />
                         <p class="text-center">@Model.Product.Name</p>
                     </a>
                 </div>
@@ -86,9 +86,45 @@
                         (4/5)
                         <a class="pull-right" href="#reviews">View all reviews</a>
                     </div>
-                    <div class="datasheet p-3 mb-2 bg-info text-white">
-                        <a href="" class="text-white"><i class="fa fa-file-text"></i> Download DataSheet</a>
-                    </div>
+                    @{ if (accessor.HttpContext.Session.GetString("role") == "admin")
+                                    {
+                                        <button type="button" id="updateProductBtn" onclick="showUpdateForm();"
+                                                class="btn btn-lg btn-warning">
+                                            Update product
+                                        </button>
+                                        <form asp-page-handler="UpdateProduct" method="post" id="updateProductForm">
+                                            <div class="form-group">
+                                                <input type="hidden" value="@Model.Product.Id" class="form-control" id="productId" name="id">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="productName">Product name:</label>
+                                                <input type="text" value="@Model.Product.Name" class="form-control" id="productName" name="name" placeholder="Enter product's name">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="productCategory">Product category:</label>
+                                                <input type="text" value="@Model.Product.Category" class="form-control" id="productCategory" name="category" placeholder="Enter product's category">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="productSummary">Product summary:</label>
+                                                <input class="form-control" value="@Model.Product.Summary" id="productSummary" name="summary" placeholder="Enter product's summary">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="productImage">Product image</label>
+                                                <input type="file" class="form-control" name="file" id="productImage">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="productPrice">Product price</label>
+                                                <input type="number" value="@Model.Product.Price" class="form-control" name="price" id="productPrice" placeholder="Enter product's price">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="productDescription">Product description</label>
+                                                <textarea class="form-control" value="@Model.Product.Description" id="productDescription" name="description" rows="4"></textarea>
+                                            </div>
+                                            <div class="form-row">
+                                                <button type="submit" class="btn btn-large btn-primary">Submit</button>
+                                            </div>
+                                        </form>
+                                    } }
                 </div>
             </div>
         </div>

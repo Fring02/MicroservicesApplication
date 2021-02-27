@@ -19,5 +19,7 @@ namespace AuthorizationService.Dtos
         [Required]
         [MaxLength(40)]
         public string Password { get; set; }
+        [Required]
+        public string Email { get; set; }
     }
 }

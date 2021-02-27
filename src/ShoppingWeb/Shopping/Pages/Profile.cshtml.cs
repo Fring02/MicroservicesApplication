@@ -23,5 +23,11 @@ namespace Shopping.Pages
             User = await _usersApi.GetUserById(Guid.Parse(HttpContext.Session.GetString("id")));
             return Page();
         }
+
+        public IActionResult OnPostSignout()
+        {
+            HttpContext.Session.Clear();
+            return RedirectToPage("Index");
+        }
     }
 }

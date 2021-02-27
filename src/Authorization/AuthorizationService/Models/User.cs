@@ -13,5 +13,7 @@ namespace AuthorizationService.Models
         public string Username { get; set; }
         public byte[] HashedPassword { get; set; }
         public byte[] SaltPassword { get; set; }
+        public string Role { get; set; }
+        public string Email { get; set; }
     }
 }

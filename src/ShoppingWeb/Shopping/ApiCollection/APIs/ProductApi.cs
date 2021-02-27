@@ -15,7 +15,7 @@ namespace Shopping.ApiCollection.APIs
 {
     public class ProductApi : BaseHttpClientFactory, IProductApi
     {
-        private IApiSettings _settings;
+        private readonly IApiSettings _settings;
         public ProductApi(IHttpClientFactory factory, IApiSettings settings) : base(factory)
         {
             _settings = settings;
@@ -74,11 +74,16 @@ namespace Shopping.ApiCollection.APIs
 
         public async Task<bool> UpdateProduct(Product product)
         {
-            using var message = _builder.Content(new StringContent(JsonConvert.SerializeObject(product), Encoding.UTF8, "application/json"))
-              .HttpMethod(HttpMethod.Put)
+            if (_builder != null) _builder.Dispose();
+            using (_builder = new HttpRequestBuilder(_settings.BaseAddress)) {
+
+                _builder.AddToPath(_settings.CatalogPath);
+            using var message = _builder.HttpMethod(HttpMethod.Put).Content(new StringContent(JsonConvert.SerializeObject(product),
+                Encoding.UTF8, "application/json"))
               .GetHttpMessage();
-            var response = await GetResponseAsync<Product>(message);
-            return response != null;
+                var response = await GetResponseAsync<Product>(message);
+                return response != null;
+            }
         }
     }
 }

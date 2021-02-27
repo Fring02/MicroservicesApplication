@@ -59,5 +59,15 @@ namespace Shopping.Pages
             await _basketApi.AddItem(username, item);
             return RedirectToPage("Cart");
         }
+
+        public async Task<IActionResult> OnPostDeleteProductAsync(string productId)
+        {
+            if(await _productApi.DeleteProduct(productId))
+            {
+                return RedirectToPage();
+            }
+            ViewData["productError"] = "Failed to delete product";
+            return Page();
+        }
     }
 }

@@ -1,9 +1,8 @@
 ﻿using AuthorizationService.Models;
+using AuthorizationService.Services;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Threading;
 
 namespace AuthorizationService.Data
 {
@@ -12,7 +11,6 @@ namespace AuthorizationService.Data
         public ModelContext(DbContextOptions<ModelContext> options) : base(options)
         {
         }
-
         public DbSet<User> Users { get; set; }
     }
 }
