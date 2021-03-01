@@ -27,9 +27,8 @@ namespace Shopping.Pages
         [BindProperty(SupportsGet = true)]
         public string SelectedCategory { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(string categoryName)
+        public async Task<IActionResult> OnGetAsync(string categoryName, int pageNumber)
         {
-
             if (!string.IsNullOrEmpty(categoryName))
             {
                 ProductList = await _productApi.GetProductByCategory(categoryName);
@@ -40,7 +39,10 @@ namespace Shopping.Pages
                 ProductList = await _productApi.GetProducts();
                 CategoryList = ProductList.Select(p => p.Category).Distinct();
             }
-
+            if(pageNumber > 0)
+            {
+                ProductList = await _productApi.GetProductByPage(pageNumber);
+            }
             return Page();
         }
 

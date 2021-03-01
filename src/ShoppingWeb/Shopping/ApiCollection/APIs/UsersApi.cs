@@ -14,7 +14,7 @@ namespace Shopping.ApiCollection.APIs
 {
     public class UsersApi : BaseHttpClientFactory, IUsersApi
     {
-        private IApiSettings _settings;
+        private readonly IApiSettings _settings;
 
         public UsersApi(IApiSettings settings, IHttpClientFactory factory) : base(factory)
         {
@@ -51,11 +51,16 @@ namespace Shopping.ApiCollection.APIs
 
         public async Task<bool> UpdateUser(User user)
         {
-            using var message = _builder
-            .HttpMethod(HttpMethod.Put).
+            if (_builder != null) _builder.Dispose();
+            using (_builder = new HttpRequestBuilder(_settings.BaseAddress))
+            {
+                _builder.AddToPath(_settings.UsersPath);
+                using var message = _builder
+            .HttpMethod(HttpMethod.Put).AddToPath("/" + user.Id).
             Content(new StringContent(JsonConvert.SerializeObject(user), Encoding.UTF8, "application/json"))
             .GetHttpMessage();
-            return await GetResponseStringAsync(message) != null;
+                return await GetResponseStringAsync(message) != null;
+            }
         }
 
         public override async Task<string> GetResponseStringAsync(HttpRequestMessage request)

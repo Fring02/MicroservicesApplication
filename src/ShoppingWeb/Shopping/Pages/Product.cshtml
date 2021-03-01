@@ -42,7 +42,8 @@
                     <h5 class="card-title">@Model.ProductList.LastOrDefault().Name</h5>
                     <p class="card-text">@Model.ProductList.LastOrDefault().Summary</p>
                     <p class="bloc_left_price">@Model.ProductList.LastOrDefault().Price $</p>
-                    } else
+                    }
+                    else
                     {
                         <div>No product to show</div>
                     }
@@ -65,17 +66,22 @@
                     <div class="col-12">
                         <nav aria-label="...">
                             <ul class="pagination">
-                                <li class="page-item disabled">
-                                    <a class="page-link" href="#" tabindex="-1">Previous</a>
-                                </li>
-                                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                <li class="page-item active">
-                                    <a class="page-link" href="#">2 <span class="sr-only">(current)</span></a>
-                                </li>
-                                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                @{ 
+                                    int.TryParse(HttpContext.Request.Query["pageNumber"].FirstOrDefault(), out int page);
+                                    if (page > 1)
+                                    {
+                                    <li class="page-item">
+                                        <a class="page-link" asp-page="Product" asp-route-pageNumber="@(page - 1)" tabindex="-1">Previous</a>
+                                    </li>
+                                    }
+                                <li class="page-item active"><a class="page-link" asp-page="Product" asp-route-pageNumber="@(page)" >@(page)</a></li>
+                                        if (page < Model.ProductList.Count())
+                                        {
                                 <li class="page-item">
-                                    <a class="page-link" href="#">Next</a>
+                                    <a class="page-link" asp-page="Product" asp-route-pageNumber="@(page + 1)">Next</a>
                                 </li>
+                                        }
+                                        }
                             </ul>
                         </nav>
                     </div>

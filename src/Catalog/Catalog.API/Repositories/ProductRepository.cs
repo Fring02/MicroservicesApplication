@@ -80,5 +80,10 @@ namespace Catalog.API.Repositories
             return deleteResult.IsAcknowledged
                 && deleteResult.DeletedCount > 0;
         }
+
+        public async Task<IEnumerable<Product>> GetProductByPage(int page, int count)
+        {
+            return await _context.Products.Find(p => true).Skip((page - 1) * count).Limit(count).ToListAsync();
+        }
     }
 }

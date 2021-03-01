@@ -176,3 +176,11 @@ footer a {
     font-weight: 600;
     color: #0062cc;
 }
+
+
+.updateUserForm button{
+    margin-left: 40px;
+}
+.updateUserField{
+    width: 200px !important;
+}

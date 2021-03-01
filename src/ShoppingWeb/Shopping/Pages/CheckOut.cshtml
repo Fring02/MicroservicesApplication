@@ -31,7 +31,7 @@
                 {
                     <li class="list-group-item d-flex justify-content-between lh-condensed">
                         <div>
-                            <h6 class="my-0">@item.ProductName</h6>
+                            <h6 class="my-0">@item.ProductName: @item.Quantity</h6>
                             <small class="text-muted">@item.Color</small>
                         </div>
                         <span class="text-muted">$@item.Price</span>
@@ -88,7 +88,7 @@
 
                 <div class="mb-3">
                     <label asp-for="Order.EmailAddress" for="email">Email <span class="text-muted">(Optional)</span></label>
-                    <input asp-for="Order.EmailAddress" type="email" class="form-control" id="email" placeholder="you@example.com">
+                    <input asp-for="Order.EmailAddress" type="email" class="form-control" id="email" value="@Model.User.Email">
                     <div class="invalid-feedback">
                         Please enter a valid email address for shipping updates.
                     </div>

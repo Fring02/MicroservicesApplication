@@ -93,6 +93,7 @@
                                             Update product
                                         </button>
                                         <form asp-page-handler="UpdateProduct" method="post" id="updateProductForm">
+                                            <p class="text-danger">@ViewData["updateProductError"]</p>
                                             <div class="form-group">
                                                 <input type="hidden" value="@Model.Product.Id" class="form-control" id="productId" name="id">
                                             </div>

@@ -27,10 +27,17 @@ namespace Catalog.API.Controllers
 
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<Product>), (int)HttpStatusCode.OK)]
-        public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
+        public async Task<ActionResult<IEnumerable<Product>>> GetProducts(int page)
         {
-            _logger.LogInformation("Getting all products");
-            return Ok(await _repository.GetProducts());
+            if (page <= 0)
+            {
+                _logger.LogInformation("Getting all products");
+                return Ok(await _repository.GetProducts());
+            } else
+            {
+                _logger.LogInformation("Getting products per page " + page);
+                return Ok(await _repository.GetProductByPage(page, 6));
+            }
         }
 
         [HttpGet("{id:length(24)}", Name = "GetProduct")]

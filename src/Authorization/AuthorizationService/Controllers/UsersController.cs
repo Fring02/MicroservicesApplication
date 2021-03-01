@@ -6,6 +6,7 @@ using AuthorizationService.Models;
 using AuthorizationService.Repositories.Interfaces;
 using AuthorizationService.Services;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AuthorizationService.Controllers
@@ -56,9 +57,7 @@ namespace AuthorizationService.Controllers
             var user = await _users.GetById(id);
             if (user == null) return BadRequest("This user doesn't exist");
             if (!string.IsNullOrEmpty(updateUser.Username)) user.Username = updateUser.Username;
-            if (!string.IsNullOrEmpty(updateUser.Firstname)) user.Firstname = updateUser.Firstname;
-            if (!string.IsNullOrEmpty(updateUser.Lastname)) user.Lastname = updateUser.Lastname;
-            if (!string.IsNullOrEmpty(updateUser.Email)) user.Lastname = updateUser.Email;
+            if (!string.IsNullOrEmpty(updateUser.Email)) user.Email = updateUser.Email;
             if (!string.IsNullOrEmpty(updateUser.Password))
             {
                 EncryptionService.EncryptPassword(updateUser.Password, out byte[] hashed, out byte[] salt);

@@ -24,10 +24,35 @@ namespace Shopping.Pages
             return Page();
         }
 
+        public async Task<IActionResult> OnPostUpdateUserAsync(User updateUser)
+        {
+            if (updateUser.Id.Equals(Guid.Empty))
+            {
+                ViewData["updateUserError"] = "Id is not specified";
+                return Page();
+            }
+            User user = await _usersApi.GetUserById(updateUser.Id);
+            UpdateUserValues(user, updateUser);
+            if(await _usersApi.UpdateUser(user))
+            {
+                return RedirectToPage();
+            }
+            ViewData["updateUserError"] = "Failed to update user";
+            return Page();
+        }
+
         public IActionResult OnPostSignout()
         {
             HttpContext.Session.Clear();
             return RedirectToPage("Index");
+        }
+
+
+        private void UpdateUserValues(User user, User updateUser)
+        {
+            if (!string.IsNullOrEmpty(updateUser.Email)) user.Email = updateUser.Email;
+            if (!string.IsNullOrEmpty(updateUser.Username)) user.Username = updateUser.Username;
+            if (!string.IsNullOrEmpty(updateUser.Password)) user.Password = updateUser.Password;
         }
     }
 }

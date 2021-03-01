@@ -64,6 +64,19 @@ namespace Shopping.ApiCollection.APIs
             return await GetResponseAsync<IEnumerable<Product>>(message);
         }
 
+        public async Task<IEnumerable<Product>> GetProductByPage(int page)
+        {
+            if (_builder != null) _builder.Dispose();
+            using (_builder = new HttpRequestBuilder(_settings.BaseAddress))
+            {
+                _builder.AddToPath(_settings.CatalogPath);
+                using var message = _builder.AddQueryString("page", page.ToString())
+              .HttpMethod(HttpMethod.Get)
+              .GetHttpMessage();
+                return await GetResponseAsync<IEnumerable<Product>>(message);
+            }
+        }
+
         public async Task<IEnumerable<Product>> GetProducts()
         {
             using var message = _builder
