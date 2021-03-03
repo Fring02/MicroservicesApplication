@@ -36,6 +36,8 @@ namespace Shopping.Pages
                 Lastname = regUser.Lastname,
                 Password = regUser.Password,
                 Username = regUser.Username,
+                Email = regUser.Email,
+                Role = regUser.Role,
                 Id = Guid.NewGuid()
             };
             string responseString = await _usersApi.RegistrationToken(user);
@@ -60,7 +62,7 @@ namespace Shopping.Pages
                     throw;
                 }
             }
-                return RedirectToPage("Product");
+                return RedirectToPage("Product", new { pageNumber = 1});
         }
     }
 }

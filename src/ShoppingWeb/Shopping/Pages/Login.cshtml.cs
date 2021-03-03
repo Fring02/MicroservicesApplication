@@ -61,7 +61,7 @@ namespace Shopping.Pages
                     throw;
                 }
             }
-            return RedirectToPage("Product");
+            return RedirectToPage("Product", new { pageNumber = 1 });
         }
     }
 }

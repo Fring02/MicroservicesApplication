@@ -12,5 +12,6 @@ namespace Shopping.ApiCollection.Interfaces
         IUsersApi UsersApi { get; }
         IOrderApi OrderApi { get; }
         IProductApi ProductApi { get; }
+        ICommentsApi CommentsApi { get; }
     }
 }

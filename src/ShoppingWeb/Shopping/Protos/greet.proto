@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+option csharp_namespace = "Shopping.Protos";
+service CommentService{
+	rpc AddComment(CommentRequest) returns (CommentIdResponse);
+	rpc GetComment(ProductRequest) returns (stream CommentResponse);
+}
+// The request message containing the user's name.
+message CommentRequest{
+	string Username = 1;
+	string Description = 2;
+	string LeavedAt = 3;
+	string ProductId = 4;
+}
+message CommentIdResponse{
+	string Id = 1;
+}
+message ProductRequest{
+	string Id = 1;
+}
+message CommentResponse{
+	string Id = 1;
+	string Username = 2;
+	string Description = 3;
+	string LeavedAt = 4;
+}

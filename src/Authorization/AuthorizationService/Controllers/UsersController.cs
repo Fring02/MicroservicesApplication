@@ -6,7 +6,6 @@ using AuthorizationService.Models;
 using AuthorizationService.Repositories.Interfaces;
 using AuthorizationService.Services;
 using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AuthorizationService.Controllers

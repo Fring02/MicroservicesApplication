@@ -29,6 +29,7 @@ namespace Shopping
             services.AddHttpClient();
             services.AddSingleton<IApiSettings>(s => s.GetRequiredService<IOptions<ApiSettings>>().Value);
             services.AddAPIs();
+            services.AddGrpcClient(Configuration["ApiSettings:GrpcConnection"]);
             services.AddSession(options =>
             {
                 options.Cookie.Name = "Shopping.Session";

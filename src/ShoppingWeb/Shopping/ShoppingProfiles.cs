@@ -16,6 +16,7 @@ namespace Shopping
             CreateMap<Product, ProductDto>().ReverseMap();
             CreateMap<User, RegistrationUser>().ReverseMap();
             CreateMap<User, LoginUser>().ReverseMap();
+            CreateMap<CommentDto, Comment>().ReverseMap();
         }
     }
 }

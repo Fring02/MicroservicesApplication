@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -15,15 +18,20 @@ namespace Shopping.Pages
     {
         private readonly IProductApi _productApi;
         private readonly IBasketApi _basketApi;
+        private readonly ICommentsApi _commentsApi;
         private readonly IWebHostEnvironment _env;
-        public ProductDetailModel(IApiFactory factory, IWebHostEnvironment env)
+        private readonly IMapper _mapper;
+        public ProductDetailModel(IApiFactory factory, IWebHostEnvironment env, IMapper mapper)
         {
             _productApi = factory.ProductApi ?? throw new ArgumentNullException(nameof(_productApi));
             _basketApi = factory.BasketApi ?? throw new ArgumentNullException(nameof(_basketApi));
+            _commentsApi = factory.CommentsApi ?? throw new ArgumentNullException(nameof(_commentsApi));
+            _mapper = mapper;
             _env = env;
         }
 
         public Product Product { get; set; }
+        public IEnumerable<Comment> Comments { get; set; }
 
         [BindProperty]
         public string Color { get; set; }
@@ -41,6 +49,9 @@ namespace Shopping.Pages
             if (Product == null)
             {
                 return NotFound();
+            } else
+            {
+                Comments = await _commentsApi.GetComments(productId);
             }
             return Page();
         }
@@ -90,6 +101,24 @@ namespace Shopping.Pages
             if (!string.IsNullOrEmpty(updateProduct.Description)) product.Description = updateProduct.Description;
             if (updateProduct.Price > 0) product.Price = updateProduct.Price;
             if (!string.IsNullOrEmpty(updateProduct.Category)) product.Category = updateProduct.Category;
+        }
+
+        public async Task<IActionResult> OnPostAddCommentAsync(CommentDto dto)
+        {
+            if (!ModelState.IsValid)
+            {
+                if (string.IsNullOrEmpty(dto.Username))
+                {
+                    return RedirectToPage("Login", new { loginError = "Please sign in" });
+                }
+                ViewData["commentError"] = "Fill comment text";
+                return await OnGetAsync(dto.ProductId);
+            }
+            var comment = _mapper.Map<Comment>(dto);
+            comment.Id = Guid.NewGuid();
+            if (await _commentsApi.AddComment(comment)) return RedirectToPage();
+            ViewData["commentError"] = "Failed to upload comment";
+            return await OnGetAsync(dto.ProductId);
         }
     }
 }

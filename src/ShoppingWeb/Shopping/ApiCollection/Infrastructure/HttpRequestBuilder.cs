@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Shopping.API.Infrastructure
 {
-    public class HttpRequestBuilder :IDisposable
+    public class HttpRequestBuilder : IDisposable
     {
         private readonly HttpRequestMessage _request;
         private string _baseAddress;

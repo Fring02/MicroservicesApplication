@@ -103,6 +103,7 @@ services:
         environment:
           - ASPNETCORE_ENVIRONMENT=Development
           - "ApiSettings:BaseAddress=http://apigateway:80"
+          - "ApiSettings:GrpcConnection=http://commentserver:80"
         depends_on:
              - catalog.api
              - basket.api
@@ -134,3 +135,15 @@ services:
         container_name: usersdb
         ports:
             - "1433:1433"
+   commentserver:
+        environment:
+          - ASPNETCORE_ENVIRONMENT=Development
+          - "ConnectionStrings:DefaultConnection=Server=usersdb,1433; Database=Usersdb; User=sa; Password=Rubin1!!; connect timeout=100;"
+        container_name: commentserver
+        depends_on:
+            - usersdb
+            - authorizationservice
+        ports:
+          - "5003:80"
+        volumes:
+          - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro

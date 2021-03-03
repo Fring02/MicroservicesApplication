@@ -70,7 +70,7 @@ namespace Shopping.ApiCollection.APIs
             using (_builder = new HttpRequestBuilder(_settings.BaseAddress))
             {
                 _builder.AddToPath(_settings.CatalogPath);
-                using var message = _builder.AddQueryString("page", page.ToString())
+              var message = _builder.AddQueryString("page", page.ToString())
               .HttpMethod(HttpMethod.Get)
               .GetHttpMessage();
                 return await GetResponseAsync<IEnumerable<Product>>(message);

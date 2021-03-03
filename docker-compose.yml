@@ -47,3 +47,10 @@ services:
       dockerfile: src/Authorization/AuthorizationService/Dockerfile
   usersdb:
     image: sqlserver
+
+  commentserver:
+    image: ${DOCKER_REGISTRY-}commentserver
+    build:
+      context: .
+      dockerfile: src/Comments/CommentServer/Dockerfile
+
