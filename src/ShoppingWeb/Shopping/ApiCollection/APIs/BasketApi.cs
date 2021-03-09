@@ -37,8 +37,8 @@ namespace Shopping.ApiCollection.APIs
             using (_builder = new HttpRequestBuilder(_settings.BaseAddress).AddToPath(_settings.BasketPath))
             {
                 using var message = _builder.AddToPath(username)
-            .HttpMethod(HttpMethod.Delete)
-            .GetHttpMessage();
+                .HttpMethod(HttpMethod.Delete)
+                .GetHttpMessage();
                 var response = await GetResponseStringAsync(message);
                 return response != null;
             }

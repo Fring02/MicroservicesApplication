@@ -110,6 +110,7 @@ services:
              - ordering.api
              - ocelotapigateway
              - authorizationservice
+             - commentserver
         volumes:
              - ${HOME}/.microsoft/usersecrets/:/root/.microsoft/usersecrets
              - ${HOME}/.aspnet/https:/root/.aspnet/https/

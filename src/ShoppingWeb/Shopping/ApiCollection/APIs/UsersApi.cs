@@ -52,9 +52,8 @@ namespace Shopping.ApiCollection.APIs
         public async Task<bool> UpdateUser(User user)
         {
             if (_builder != null) _builder.Dispose();
-            using (_builder = new HttpRequestBuilder(_settings.BaseAddress))
+            using (_builder = new HttpRequestBuilder(_settings.BaseAddress).AddToPath(_settings.UsersPath))
             {
-                _builder.AddToPath(_settings.UsersPath);
                 using var message = _builder
             .HttpMethod(HttpMethod.Put).AddToPath("/" + user.Id).
             Content(new StringContent(JsonConvert.SerializeObject(user), Encoding.UTF8, "application/json"))

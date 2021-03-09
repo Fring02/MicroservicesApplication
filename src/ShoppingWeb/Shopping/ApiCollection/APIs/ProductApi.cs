@@ -67,9 +67,8 @@ namespace Shopping.ApiCollection.APIs
         public async Task<IEnumerable<Product>> GetProductByPage(int page)
         {
             if (_builder != null) _builder.Dispose();
-            using (_builder = new HttpRequestBuilder(_settings.BaseAddress))
+            using (_builder = new HttpRequestBuilder(_settings.BaseAddress).AddToPath(_settings.CatalogPath))
             {
-                _builder.AddToPath(_settings.CatalogPath);
               var message = _builder.AddQueryString("page", page.ToString())
               .HttpMethod(HttpMethod.Get)
               .GetHttpMessage();
@@ -88,10 +87,8 @@ namespace Shopping.ApiCollection.APIs
         public async Task<bool> UpdateProduct(Product product)
         {
             if (_builder != null) _builder.Dispose();
-            using (_builder = new HttpRequestBuilder(_settings.BaseAddress)) {
-
-                _builder.AddToPath(_settings.CatalogPath);
-            using var message = _builder.HttpMethod(HttpMethod.Put).Content(new StringContent(JsonConvert.SerializeObject(product),
+            using (_builder = new HttpRequestBuilder(_settings.BaseAddress).AddToPath(_settings.CatalogPath)) {
+             var message = _builder.HttpMethod(HttpMethod.Put).Content(new StringContent(JsonConvert.SerializeObject(product),
                 Encoding.UTF8, "application/json"))
               .GetHttpMessage();
                 var response = await GetResponseAsync<Product>(message);

@@ -11,10 +11,12 @@ namespace Shopping.API.Infrastructure
 {
     public class HttpRequestBuilder : IDisposable
     {
-        private readonly HttpRequestMessage _request;
+        private HttpRequestMessage _request;
         private string _baseAddress;
         private readonly ApiBuilder _apiBuilder;
-        public HttpRequestBuilder(string uri) : this(new ApiBuilder(uri)) { }
+        public HttpRequestBuilder(string uri) : this(new ApiBuilder(uri)) {
+        
+        }
         public HttpRequestBuilder(ApiBuilder apiBuilder)
         {
             _request = new HttpRequestMessage();
@@ -91,7 +93,7 @@ namespace Shopping.API.Infrastructure
         }
         public HttpRequestMessage GetHttpMessage()
         {
-            return _request;
+           return _request;
         }
         public ApiBuilder GetApiBuilder()
         {
