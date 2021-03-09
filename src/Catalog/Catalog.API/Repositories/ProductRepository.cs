@@ -85,5 +85,11 @@ namespace Catalog.API.Repositories
         {
             return await _context.Products.Find(p => true).Skip((page - 1) * count).Limit(count).ToListAsync();
         }
+
+        public async Task<IEnumerable<Product>> GetFilteredProduct(string productName)
+        {
+            var filter = Builders<Product>.Filter.Regex("Name", new MongoDB.Bson.BsonRegularExpression(productName));
+            return await _context.Products.Find(filter).ToListAsync();
+        }
     }
 }

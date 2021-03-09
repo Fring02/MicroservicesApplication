@@ -40,6 +40,14 @@ namespace Shopping.ApiCollection.APIs
             return response != null;
         }
 
+        public async Task<IEnumerable<Product>> GetFilteredProducts(string productName)
+        {
+            using var message = _builder.AddQueryString("productName", productName)
+              .HttpMethod(HttpMethod.Get)
+              .GetHttpMessage();
+            return await GetResponseAsync<IEnumerable<Product>>(message);
+        }
+
         public async Task<Product> GetProduct(string id)
         {
             using var message = _builder.AddToPath(id)

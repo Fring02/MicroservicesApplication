@@ -32,7 +32,9 @@ namespace Shopping.Pages
             if (!string.IsNullOrEmpty(categoryName))
             {
                 ProductList = await _productApi.GetProductByCategory(categoryName);
+                CategoryList = ProductList.Select(p => p.Category).Distinct();
                 SelectedCategory = categoryName;
+                return Page();
             }
             else
             {
@@ -43,6 +45,21 @@ namespace Shopping.Pages
             {
                 ProductList = await _productApi.GetProductByPage(pageNumber);
             }
+            return Page();
+        }
+
+        public async Task<IActionResult> OnPostFilteredProductsAsync(string productName, int pageNumber)
+        {
+            if (!string.IsNullOrEmpty(productName))
+            {
+                ProductList = await _productApi.GetFilteredProducts(productName);
+            }
+            else
+            {
+                ProductList = await _productApi.GetProductByPage(pageNumber);
+            }
+            
+            CategoryList = ProductList.Select(p => p.Category).Distinct();
             return Page();
         }
 
